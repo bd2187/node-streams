@@ -16,8 +16,12 @@ var greetAsync = fs.readFile(`${__dirname}/greet.txt`, (err, data) => {
 
 /*
     Read contents of loremIpsum.txt via a readable stream.
+
+    loremIpsum >>>> Readable Stream >>>> NodeJS
+
     Buffer can hold up to 32 kb at one time.
 */
+
 var readable = fs.createReadStream(`${__dirname}/loremIpsum.txt`, {
   highWaterMark: 32 * 1024
 });
