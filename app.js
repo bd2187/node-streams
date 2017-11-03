@@ -1,5 +1,6 @@
 // builtin fs library
-var fs = require("fs");
+const fs = require("fs");
+const zlib = require("zlib");
 
 // Reads file synchronously
 var greet = fs.readFileSync(`${__dirname}/greet.txt`, "utf8");
@@ -29,6 +30,8 @@ var readable = fs.createReadStream(`${__dirname}/loremIpsum.txt`, {
 
 var writable = fs.createWriteStream(`${__dirname}/greet.txt`);
 
+var compressed = fs.createWriteStream(`${__dirname}/greet.txt.gz`);
+
 /*
     .on() and .emit() inherited from Events object down prototype chain
     "data" event emitted when data is received
@@ -39,3 +42,11 @@ var writable = fs.createWriteStream(`${__dirname}/greet.txt`);
   readable.on('data', chunk => writable.write(chunk))
 */
 readable.pipe(writable);
+
+/*
+  gzip creates a transform stream which compresses chunks
+  from another stream
+ */
+const gzip = zlib.createGzip();
+
+readable.pipe(gzip).pipe(compressed);
