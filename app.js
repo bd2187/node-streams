@@ -23,15 +23,19 @@ var greetAsync = fs.readFile(`${__dirname}/greet.txt`, (err, data) => {
 */
 
 var readable = fs.createReadStream(`${__dirname}/loremIpsum.txt`, {
-  highWaterMark: 32 * 1024
+  encoding: "utf-8",
+  highWaterMark: 16 * 1024
 });
+
+var writable = fs.createWriteStream(`${__dirname}/greet.txt`);
 
 /*
     .on() and .emit() inherited from Events object down prototype chain
     "data" event emitted when data is received
 */
 
-// Set Event Listener
-readable.on("data", function(chunk) {
-  console.log(chunk);
-});
+/*
+  This code is equivalent to:
+  readable.on('data', chunk => writable.write(chunk))
+*/
+readable.pipe(writable);
